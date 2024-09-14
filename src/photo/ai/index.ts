@@ -55,19 +55,19 @@ export const getAiImageQuery = (
   existingTags: Tags = [],
 ): string => {
   switch (query) {
-  case 'title': return 'Write a compelling title for this image in 3 words or less';
-  case 'caption': return 'Write a pithy caption for this image in 6 words or less and no punctuation';
-  case 'title-and-caption': return 'Write a compelling title and pithy caption of 8 words or less for this image, using the format Title: "title" Caption: "caption"';
+  case 'title': return '为这张照片写一个引人注目的标题(6个字以内),直接返回标题';
+  case 'caption': return '为这张照片写一个简洁的说明文字(10个字以内,不带标点符号),直接返回说明';
+  case 'title-and-caption': return '为这张照片写一个引人注目的标题和简洁的说明文字(总共18个字以内),使用格式 Title: "标题" Caption: "说明"';
   case 'tags':
-    const tagQuery = 'Describe this image in 1-2 comma-separated unique keywords, with no adjective or adverbs. Avoid using general terms like "nature," "travel," "architecture," or "sky." Use terms that are highly specific to the image and not redundant.';
+    const tagQuery = '请用1到2个独特的关键词描述这张图片，用中文逗号,分隔。避免使用“自然”、“旅行”、“建筑”或“天空”等泛泛的词语，不要使用形容词或副词。请使用对图像具有高度针对性的术语，避免重复。';
     const tags = existingTags.map(({ tag }) => tag).join(', ');
     return tags
-      ? `${tagQuery}. Consider using some of these existing tags, but only if they are relevant: ${tags}.`
+      ? `${tagQuery}. 考虑使用这些现有的标签，但前提是它们与图像相关。: ${tags}.`
       : tagQuery;
-  case 'description-small': return 'Describe this image succinctly without the initial text "This image shows" or "This is a picture of"';
-  case 'description': return 'Describe this image';
-  case 'description-large': return 'Describe this image in detail';
-  case 'description-semantic': return 'List up to 5 things in this image without description as a comma-separated list';
+  case 'description-small': return '简明扼要地描述这张照片(不要以"这张照片显示"或"这是一张...的照片"开头)，直接返回描述';
+  case 'description': return '描述这张图片';
+  case 'description-large': return '详细描述这张图片';
+  case 'description-semantic': return '以英文逗号,分隔的列表形式列出这张图片中的最多5个事物(不带描述),直接返回';
   }
 };
 

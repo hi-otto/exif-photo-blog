@@ -55,7 +55,7 @@ export const generateAiImageQueries = async (
           );
         }
       }
-  
+
       if (textFieldsToGenerate.includes('tags')) {
         const existingTags = await getUniqueTags();
         tags = await generateOpenAiImageQuery(
@@ -63,8 +63,9 @@ export const generateAiImageQueries = async (
           getAiImageQuery('tags', existingTags),
           isBatch,
         );
+        if (tags) tags = tags.replaceAll('，', ',');
       }
-  
+
       if (textFieldsToGenerate.includes('semantic')) {
         semanticDescription = await generateOpenAiImageQuery(
           imageBase64,
