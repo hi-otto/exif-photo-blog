@@ -43,14 +43,22 @@ export type AiImageQuery =
   'description-semantic';
 
 export const AI_IMAGE_QUERIES: Record<AiImageQuery, string> = {
-  'title': 'Write a compelling title for this image in 3 words or less',
-  'caption': 'Write a pithy caption for this image in 6 words or less and no punctuation',
-  'title-and-caption': 'Write a compelling title and pithy caption of 8 words or less for this image, using the format Title: "title" Caption: "caption"',
-  'tags': 'Describe this image three or less comma-separated keywords with no adjective or adverbs',
-  'description-small': 'Describe this image succinctly without the initial text "This image shows" or "This is a picture of"',
-  'description': 'Describe this image',
-  'description-large': 'Describe this image in detail',
-  'description-semantic': 'List up to 5 things in this image without description as a comma-separated list',
+  'title': '为这张照片写一个引人注目的标题(6个字以内),直接返回标题',
+  'caption': '为这张照片写一个简洁的说明文字(10个字以内,不带标点符号),直接返回说明',
+  'title-and-caption': '为这张照片写一个引人注目的标题和简洁的说明文字(总共18个字以内),使用格式 Title: "标题" Caption: "说明"',
+  'tags': `从下面挑选1～3个标签，返回最符合照片的标签：
+  山脉、湖泊、天空、河流、海洋
+  猫、狗、鸟类
+  花朵、树木、草地
+  建筑、桥梁、道路
+  光线、夜晚、日落
+  窗户、床、沙发
+  音乐会、表演、人物
+  注意，你必须按如下格式返回标签，比如：标签1,标签2,标签3`,
+  'description-small': '简明扼要地描述这张照片(不要以"这张照片显示"或"这是一张...的照片"开头)，直接返回描述',
+  'description': '描述这张图片',
+  'description-large': '详细描述这张图片',
+  'description-semantic': '以英文逗号,分隔的列表形式列出这张图片中的最多5个事物(不带描述),直接返回',
 };
 
 export const parseTitleAndCaption = (text: string) => {
