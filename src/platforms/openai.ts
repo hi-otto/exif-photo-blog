@@ -8,7 +8,7 @@ import { cleanUpAiTextResponse } from '@/photo/ai';
 import { redis } from '@/platforms/redis';
 
 const RATE_LIMIT_IDENTIFIER = 'openai-image-query';
-const MODEL = 'gpt-4o';
+const MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
 
 const openai = AI_CONTENT_GENERATION_ENABLED
   ? createOpenAI({

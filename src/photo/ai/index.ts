@@ -65,27 +65,28 @@ export type AiImageQuery =
   'description-large' |
   'description-semantic';
 
+
 export const getAiImageQuery = (
   query: AiImageQuery,
   existingTags: Tags = [],
   existingTitle?: string,
 ): string => {
   switch (query) {  
-    case 'title': return 'Write a compelling title for this image in 3 words or less';
+    case 'title': return '请用中文为这张图片写一个有吸引力的标题，不超过 3 个词。';
     case 'caption': return existingTitle
-      ? `Write a pithy caption for this image in 6 words or less and no punctuation that complements the existing title: "${existingTitle}"`
-      : 'Write a pithy caption for this image in 6 words or less and no punctuation';
-    case 'title-and-caption': return 'Write a compelling title and pithy caption of 8 words or less for this image, using the format Title: "title" Caption: "caption"';
+      ? `请用中文为这张图片写一个精炼的配文，不超过 6 个词且不使用标点符号，需与现有标题相得益彰："${existingTitle}"`
+      : '请用中文为这张图片写一个精炼的配文，不超过 6 个词且不使用标点符号。';
+    case 'title-and-caption': return '请用中文为这张图片写一个有吸引力的标题和一个精炼的配文，总计不超过 8 个词，使用以下格式输出 Title: "title" Caption: "caption"';
     case 'tags':
-      const tagQuery = 'Describe this image in 1-2 comma-separated unique keywords, with no adjective or adverbs. Avoid using general terms like "nature," "travel," "architecture," or "sky." Use terms that are highly specific to the image and not redundant.';
+      const tagQuery = '请用 1–2 个以英文逗号分隔的独特中文关键词描述这张图片，不要使用形容词或副词。避免使用诸如“自然”“旅行”“建筑”“天空”等泛泛词语。使用对图像高度具体且不重复的名词。';
       const tags = existingTags.map(({ tag }) => tag).join(', ');
       return tags
-        ? `${tagQuery}. Consider using some of these existing tags, but only if they are relevant: ${tags}.`
+        ? `${tagQuery}可以考虑使用以下已有标签，但仅在确实相关时采用：${tags}。`
         : tagQuery;
-    case 'description-small': return 'Describe this image succinctly without the initial text "This image shows" or "This is a picture of"';
-    case 'description': return 'Describe this image';
-    case 'description-large': return 'Describe this image in detail';
-    case 'description-semantic': return 'List up to 5 things in this image without description as a comma-separated list';
+    case 'description-small': return '请用中文简洁描述这张图片，不要以“这张图片展示了”或“这是一张……的照片”等开头。';
+    case 'description': return '请用中文描述这张图片。';
+    case 'description-large': return '请用中文详细描述这张图片。';
+    case 'description-semantic': return '请列出这张图片中的最多 5 个事物或要素，不加解释，使用英文逗号分隔。';
   }
 };
 
