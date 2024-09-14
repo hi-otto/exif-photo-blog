@@ -11,7 +11,10 @@ const RATE_LIMIT_IDENTIFIER = 'openai-image-query';
 const RATE_LIMIT_MAX_QUERIES_PER_HOUR = 100;
 
 const openai = AI_TEXT_GENERATION_ENABLED
-  ? createOpenAI({ apiKey: process.env.OPENAI_SECRET_KEY })
+  ? createOpenAI({ 
+    apiKey: process.env.OPENAI_SECRET_KEY,
+    baseURL: process.env.OPENAI_BASE_URL 
+  })
   : undefined;
 
 const ratelimit = HAS_VERCEL_KV
