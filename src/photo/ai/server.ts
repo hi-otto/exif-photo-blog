@@ -51,15 +51,16 @@ export const generateAiImageQueries = async (
           );
         }
       }
-  
+
       if (textFieldsToGenerate.includes('tags')) {
         const existingTags = await getUniqueTags();
         tags = await generateOpenAiImageQuery(
           imageBase64,
           getAiImageQuery('tags', existingTags),
         );
+        if (tags) tags = tags.replaceAll('，', ',');
       }
-  
+
       if (textFieldsToGenerate.includes('semantic')) {
         semanticDescription = await generateOpenAiImageQuery(
           imageBase64,

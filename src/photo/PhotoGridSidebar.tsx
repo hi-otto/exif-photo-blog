@@ -57,6 +57,36 @@ export default function PhotoGridSidebar({
           }}
         />]}
       />}
+      {photosCount > 0 && start
+        ? <HeaderList
+          title={photoQuantityText(photosCount, false)}
+          items={start === end
+            ? [start]
+            : [`${end} –`, start]}
+        />
+        : <HeaderList
+          items={[photoQuantityText(photosCount, false)]}
+        />}
+      {cameras.length > 0 && <HeaderList
+        title="Cameras"
+        icon={<IoMdCamera
+          size={13}
+          className="text-icon translate-y-[-0.25px]"
+        />}
+        items={cameras
+          .sort(sortCamerasWithCount)
+          .map(({ cameraKey, camera, count }) =>
+            <PhotoCamera
+              key={cameraKey}
+              camera={camera}
+              type="text-only"
+              countOnHover={count}
+              prefetch={false}
+              contrast="low"
+              hideAppleIcon
+              badged
+            />)}
+      />}
       {tags.length > 0 && <HeaderList
         title='Tags'
         icon={<FaTag
@@ -96,26 +126,6 @@ export default function PhotoGridSidebar({
           }
         })}
       />}
-      {cameras.length > 0 && <HeaderList
-        title="Cameras"
-        icon={<IoMdCamera
-          size={13}
-          className="text-icon translate-y-[-0.25px]"
-        />}
-        items={cameras
-          .sort(sortCamerasWithCount)
-          .map(({ cameraKey, camera, count }) =>
-            <PhotoCamera
-              key={cameraKey}
-              camera={camera}
-              type="text-only"
-              countOnHover={count}
-              prefetch={false}
-              contrast="low"
-              hideAppleIcon
-              badged
-            />)}
-      />}
       {simulations.length > 0 && <HeaderList
         title="Films"
         icon={<PhotoFilmSimulationIcon
@@ -136,16 +146,6 @@ export default function PhotoGridSidebar({
               />
             </div>)}
       />}
-      {photosCount > 0 && start
-        ? <HeaderList
-          title={photoQuantityText(photosCount, false)}
-          items={start === end
-            ? [start]
-            : [`${end} –`, start]}
-        />
-        : <HeaderList
-          items={[photoQuantityText(photosCount, false)]}
-        />}
     </div>
   );
 }
