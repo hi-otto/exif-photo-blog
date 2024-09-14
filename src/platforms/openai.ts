@@ -13,10 +13,13 @@ import { cleanUpAiTextResponse } from '@/photo/ai';
 const redis = HAS_REDIS_STORAGE ? Redis.fromEnv() : undefined;
 
 const RATE_LIMIT_IDENTIFIER = 'openai-image-query';
-const MODEL = 'gpt-4o';
+const MODEL = process.env.OPENAI_MODEL || 'gpt-4o';
 
 const openai = AI_TEXT_GENERATION_ENABLED
-  ? createOpenAI({ apiKey: process.env.OPENAI_SECRET_KEY })
+  ? createOpenAI({
+    apiKey: process.env.OPENAI_SECRET_KEY,
+    baseURL: process.env.OPENAI_BASE_URL,
+  })
   : undefined;
 
 const ratelimit = redis
