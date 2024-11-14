@@ -11,9 +11,9 @@ const RATE_LIMIT_IDENTIFIER = 'openai-image-query';
 const RATE_LIMIT_MAX_QUERIES_PER_HOUR = 100;
 
 const openai = AI_TEXT_GENERATION_ENABLED
-  ? createOpenAI({ 
+  ? createOpenAI({
     apiKey: process.env.OPENAI_SECRET_KEY,
-    baseURL: process.env.OPENAI_BASE_URL 
+    baseURL: process.env.OPENAI_BASE_URL
   })
   : undefined;
 
@@ -48,7 +48,7 @@ const getImageTextArgs = (
   Parameters<typeof streamText>[0] &
   Parameters<typeof generateText>[0]
 ) | undefined => openai ? {
-  model: openai('gpt-4o'),
+  model: openai(process.env.OPENAI_MODEL || 'gpt-4o'),
   messages: [{
     'role': 'user',
     'content': [
