@@ -15,7 +15,7 @@ const checkRateLimitAndThrow = (isBatch?: boolean) =>
     ...isBatch && { tokens: 1200, duration: '1d' },
   });
 
-const MODEL: Parameters<NonNullable<typeof openai>>[0] = 'gpt-5.2';
+const MODEL: Parameters<NonNullable<typeof openai>>[0] = process.env.OPENAI_MODEL || 'gpt-5.2';
 
 const openai = OPENAI_SECRET_KEY
   ? createOpenAI({
