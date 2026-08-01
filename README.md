@@ -133,8 +133,24 @@ To enable AI-powered color analysis and text descriptions of photos, configure a
    - Set `OPENAI_MODEL` to choose a specific model (set to 'compatible' to use gpt-4o)
 3. URL configuration (optional)
    - Set `OPENAI_BASE_URL` to use alternate OpenAI-compatible providers
+   - Set `OPENAI_API_MODE=chat` for Chat Completions endpoints; the default is `responses`. This also applies to connection tests and explicit-model queries.
 4. Add [rate limiting](#rate-limiting) (_recommended_)
 5. Configure auto-generated fields (optional, see above for instructions)
+
+#### Google AI Studio
+
+Use Google's [OpenAI-compatible endpoint](https://ai.google.dev/gemini-api/docs/openai) with these environment variables:
+
+```dotenv
+OPENAI_API_MODE=chat
+OPENAI_BASE_URL=https://generativelanguage.googleapis.com/v1beta/openai/
+OPENAI_SECRET_KEY=<Google AI Studio API key>
+OPENAI_MODEL=gemini-3.8-flash
+```
+
+Choose a Gemini model available to your Google project that supports image input and structured output. Requests go directly to Google using your project's quota and billing; Vercel AI Gateway is not involved. Keep the key server-side and redeploy after changing environment variables. The admin model-comparison list remains OpenAI-specific; it does not list Gemini models.
+
+For local testing, put these variables in the git-ignored `.env.development.local` and run `pnpm dev`. This file takes precedence over `.env.local` during development. Use the admin connection test and generate photo metadata before saving. Vercel Secret variables are write-only after saving; an exported placeholder is not a usable API key, so supply the original key locally. Run offline protocol checks with `pnpm test --watch=false --runInBand __tests__/ai.test.ts __tests__/openai-protocol.test.ts`; these use a test key and a mocked HTTP response, with no external API calls.
 
 ### Location
 

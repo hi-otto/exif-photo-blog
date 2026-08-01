@@ -4,6 +4,7 @@ import { createOpenAI } from '@ai-sdk/openai';
 import {
   AI_CONTENT_GENERATION_PROVIDER,
   AI_GATEWAY_MODEL,
+  OPENAI_API_MODE,
   OPENAI_BASE_URL,
   OPENAI_MODEL,
   OPENAI_SECRET_KEY,
@@ -37,6 +38,16 @@ const openaiClient = OPENAI_SECRET_KEY
   })
   : undefined;
 
+// Use the same protocol for configured and explicit-model queries.
+const getOpenAiModel = (modelId: OpenAIModel) => {
+  if (!openaiClient) { return undefined; }
+  switch (OPENAI_API_MODE) {
+    case 'responses': return openaiClient.responses(modelId);
+    case 'chat': return openaiClient.chat(modelId);
+    default: throw new Error('OPENAI_API_MODE must be responses or chat');
+  }
+};
+
 // AI_CONTENT_GENERATION_PROVIDER (src/app/config.ts) is the single
 // source of truth for which provider wins: direct OpenAI when a secret key
 // is set, else Vercel AI Gateway when a model is set, else off. `model`
@@ -45,7 +56,7 @@ const model: LanguageModel | undefined =
   AI_CONTENT_GENERATION_PROVIDER === 'gateway' && AI_GATEWAY_MODEL
     ? gateway(AI_GATEWAY_MODEL)
     : AI_CONTENT_GENERATION_PROVIDER === 'openai'
-      ? openaiClient?.(OPENAI_MODEL_ID)
+      ? getOpenAiModel(OPENAI_MODEL_ID)
       : undefined;
 
 const getImageTextArgsForModel = (
@@ -164,9 +175,10 @@ export const generateOpenAiImageObjectQueryForModel = async <
   schema: T,
   modelId: OpenAIModel,
 ): Promise<z.infer<T>> => {
-  if (openaiClient) {
+  const selectedModel = getOpenAiModel(modelId);
+  if (selectedModel) {
     return generateImageObjectQuery(
-      openaiClient(modelId),
+      selectedModel,
       imageBase64,
       query,
       schema,
@@ -182,10 +194,11 @@ export const generateOpenAiImageQueryForModel = async (
   query: string,
   modelId: OpenAIModel,
 ) => {
-  if (openaiClient) {
+  const selectedModel = getOpenAiModel(modelId);
+  if (selectedModel) {
     await checkRateLimitAndThrow(true);
     return generateText(getImageTextArgsForModel(
-      openaiClient(modelId),
+      selectedModel,
       imageBase64,
       query,
     )).then(({ text }) => cleanUpAiTextResponse(text));
