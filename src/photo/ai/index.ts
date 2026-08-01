@@ -54,24 +54,25 @@ export type AiImageQuery =
   'tags' |
   'semantic';
 
+
 export const getAiImageQuery = (
   query: AiImageQuery,
   existingTitle?: string,
   existingTags: Tags = [],
 ): string => {
   switch (query) {  
-    case 'title': return 'Write a compelling title for this image in 3 words or less.';
+    case 'title': return '为这张图片创作一个引人注目的标题，不超过 3 个词。';
     case 'caption': return existingTitle
-      ? `Write a pithy caption for this image in 6 words or less and no punctuation that complements the existing title: "${existingTitle}."`
-      : 'Write a pithy caption for this image in 6 words or less and no punctuation.';
-    case 'title-and-caption': return 'Write a compelling title and pithy caption of 8 words or less for this image, using the format Title: "title" Caption: "caption."';
+      ? `为这张图片写一段精炼的说明文字，不超过 6 个词，无标点符号，并与现有标题相得益彰："${existingTitle}。"`
+      : '为这张图片写一段精炼的说明文字，不超过 6 个词，无标点符号。';
+    case 'title-and-caption': return '为这张图片创作一个引人注目的标题和精炼的说明文字，总共不超过 8 个词，使用以下格式：标题："标题内容" 说明："说明内容"。';
     case 'tags':
-      const tagQuery = 'Describe this image in 1-2 comma-separated unique keywords, with no adjective or adverbs. Avoid using general terms like "nature," "travel," "architecture," or "sky." Use terms that are highly specific to the image and not redundant.';
+      const tagQuery = '请用 1–2 个以英文逗号分隔的独特中文关键词描述这张图片，不要使用形容词或副词。避免使用诸如"自然""旅行""建筑""天空"等泛泛词语。使用对图像高度具体且不重复的名词。';
       const tags = existingTags.map(({ tag }) => tag).join(', ');
       return tags
-        ? `${tagQuery}. Consider using some of these existing tags, but only if they are relevant: ${tags}.`
+        ? `${tagQuery}可以考虑使用以下已有标签，但仅在确实相关时采用：${tags}。`
         : tagQuery;
-    case 'semantic': return 'Describe this image succinctly without initial text like "This image shows" or "This is a picture of."';
+    case 'semantic': return '简洁地描述这张图片，不要使用"这张图片展示了"或"这是一张……的图片"等开头语。';
   }
 };
 
